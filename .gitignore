@@ -1,0 +1,11 @@
+.DS_Store
+.env*
+.serverless
+.venv*
+.webpack
+awsconfig
+build
+node_modules
+/config.yml
+exports.yml
+yarn-error.log
