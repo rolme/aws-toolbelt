@@ -58,6 +58,12 @@ class Profile extends Model {
         currentDefaultProfile.isDefault = false;
         newDefaultProfile.isDefault = true;
         this.outputCredentials();
+
+        console.log(
+          `${chalk.green("Default profile set to:")} ${chalk.bold(
+            newDefaultProfile.id + " (" + newDefaultProfile.project + ")"
+          )}`
+        );
         return;
       }
     }
@@ -74,7 +80,7 @@ class Profile extends Model {
       fs.copyFileSync(this.credentialsPath, backupPath);
 
       console.log(
-        `${chalk.green("Backup created at: ")} ${chalk.bold(backupPath)}`
+        `${chalk.green("Backup created at:")} ${chalk.bold(backupPath)}`
       );
     } catch (e) {
       console.log(
