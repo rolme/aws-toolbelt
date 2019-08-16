@@ -116,12 +116,20 @@ project=${credential.project}
   }
 
   private parseCredentials(): void {
-    const credentials: string = fs.readFileSync(this.credentialsPath, "utf8");
-    const profiles: [IProfile?] = [];
+    try {
+      const credentials: string = fs.readFileSync(this.credentialsPath, "utf8");
+      const profiles: [IProfile?] = [];
 
-    credentials.split("\n[").forEach(block => {
-      this.credentials.push(this.parseBlock(block));
-    });
+      credentials.split("\n[").forEach(block => {
+        this.credentials.push(this.parseBlock(block));
+      });
+    } catch (e) {
+      console.log(
+        `${chalk.red("Error" + ":")} Unable to find credentials at: ${
+          this.credentialsPath
+        }`
+      );
+    }
   }
 
   private parseBlock(block: string): IProfile {
