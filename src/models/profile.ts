@@ -57,7 +57,6 @@ class Profile extends Model {
       if (currentDefaultProfile) {
         currentDefaultProfile.isDefault = false;
         newDefaultProfile.isDefault = true;
-        this.backupCredentials();
         this.outputCredentials();
         return;
       }
@@ -69,11 +68,13 @@ class Profile extends Model {
     );
   }
 
-  private backupCredentials(): void {
+  public backup(): void {
+    const backupPath = `${this.credentialsPath}.${Date.now()}`;
     try {
-      fs.copyFileSync(
-        this.credentialsPath,
-        `${this.credentialsPath}.${Date.now()}`
+      fs.copyFileSync(this.credentialsPath, backupPath);
+
+      console.log(
+        `${chalk.green("Backup created at: ")} ${chalk.bold(backupPath)}`
       );
     } catch (e) {
       console.log(
