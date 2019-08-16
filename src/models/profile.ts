@@ -57,8 +57,13 @@ class Profile extends Model {
       if (currentDefaultProfile) {
         currentDefaultProfile.isDefault = false;
         newDefaultProfile.isDefault = true;
-        this.backupCredentials();
         this.outputCredentials();
+
+        console.log(
+          `${chalk.green("Default profile set to:")} ${chalk.bold(
+            newDefaultProfile.id + " (" + newDefaultProfile.project + ")"
+          )}`
+        );
         return;
       }
     }
@@ -69,11 +74,13 @@ class Profile extends Model {
     );
   }
 
-  private backupCredentials(): void {
+  public backup(): void {
+    const backupPath = `${this.credentialsPath}.${Date.now()}`;
     try {
-      fs.copyFileSync(
-        this.credentialsPath,
-        `${this.credentialsPath}.${Date.now()}`
+      fs.copyFileSync(this.credentialsPath, backupPath);
+
+      console.log(
+        `${chalk.green("Backup created at:")} ${chalk.bold(backupPath)}`
       );
     } catch (e) {
       console.log(
@@ -109,12 +116,20 @@ project=${credential.project}
   }
 
   private parseCredentials(): void {
-    const credentials: string = fs.readFileSync(this.credentialsPath, "utf8");
-    const profiles: [IProfile?] = [];
+    try {
+      const credentials: string = fs.readFileSync(this.credentialsPath, "utf8");
+      const profiles: [IProfile?] = [];
 
-    credentials.split("\n[").forEach(block => {
-      this.credentials.push(this.parseBlock(block));
-    });
+      credentials.split("\n[").forEach(block => {
+        this.credentials.push(this.parseBlock(block));
+      });
+    } catch (e) {
+      console.log(
+        `${chalk.red("Error" + ":")} Unable to find credentials at: ${
+          this.credentialsPath
+        }`
+      );
+    }
   }
 
   private parseBlock(block: string): IProfile {
