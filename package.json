@@ -1,8 +1,8 @@
 {
   "author": "roland.parnaso@gmail.com",
   "bin": {
-    "atb": "./build/index.js",
-    "aws-toolbelt": "./build/index.js"
+    "atb": "./.build/index.js",
+    "aws-toolbelt": "./.build/index.js"
   },
   "description": "Random tools to make aws development and deployment easier.",
   "dependencies": {

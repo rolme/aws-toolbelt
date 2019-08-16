@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import "./polyfill";
+import "./polyfills";
 import * as program from "commander";
 import Profile from "./models/profile";
 
