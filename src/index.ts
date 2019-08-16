@@ -9,7 +9,7 @@ let profile = new Profile();
 program
   .description("AWS Toolbelt")
   .version("0.0.1")
-  .usage("profile [options]")
+  .usage("[options]")
   .option("-l, --list", "list existing profiles")
   .option("-s, --set <profile-name>", "set your default profile")
   .parse(process.argv);
