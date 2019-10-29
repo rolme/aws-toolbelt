@@ -1,5 +1,6 @@
-let fs = require("fs");
-let os = require("os");
+const fs = require("fs");
+const os = require("os");
+const { exec } = require('child_process');
 import chalk from "chalk";
 import Model from "./model";
 
@@ -58,12 +59,13 @@ class Profile extends Model {
         currentDefaultProfile.isDefault = false;
         newDefaultProfile.isDefault = true;
         this.outputCredentials();
-
+        this.updateDefaultAwsProjectFile(project);
         console.log(
           `${chalk.green("Default profile set to:")} ${chalk.bold(
             newDefaultProfile.id + " (" + newDefaultProfile.project + ")"
           )}`
         );
+
         return;
       }
     }
@@ -112,6 +114,16 @@ project=${credential.project}
           this.credentialsPath
         }`
       );
+    }
+  }
+
+  private updateDefaultAwsProjectFile(project: string): void {
+    const filePath = `${process.env.HOME}/.default_aws_project`;
+    try {
+      const zshrc = `${process.env.HOME}/.zshrc`;
+      fs.writeFileSync(filePath, project);
+    } catch (e) {
+      console.log(`${chalk.red("Error" + ":")} Unable to write to file: ${filePath}`);
     }
   }
 
